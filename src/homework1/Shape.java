@@ -33,7 +33,6 @@ public abstract class Shape implements Cloneable {
      */
     public Point getLocation() {
     	// TODO: Implement this method
-        location.getLocation();
         Point loc = new Point(location.getLocation());
         return loc;
     }
@@ -115,8 +114,6 @@ public abstract class Shape implements Cloneable {
         newShape.location = (Point) this.location.clone();
         newShape.color = (Color) this.color;
 
-
-
-
+        return  newShape;
     }
 }
