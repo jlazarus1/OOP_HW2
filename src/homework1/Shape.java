@@ -15,6 +15,12 @@ public abstract class Shape implements Cloneable {
 
 	
 	// TODO: Write Abstraction Function
+    // Abs. Function:
+    //  represents a shape with a top left corner at this.location and with a color as in this.color.
+    //
+    // Rep .Invariant:
+    //  location != null
+    //  color != null.
 	
 	// TODO: Write Representation Invariant
 	
@@ -25,16 +31,20 @@ public abstract class Shape implements Cloneable {
     public Shape(Point location, Color color) {
     	setLocation(location);
     	setColor(color);
+        checkRep();
     }
-
+    private void checkRep(){
+        assert color != null: "Color must not be null.";
+        assert location != null: "Location must not be null.";
+    }
 
     /**
      * @return the top left corner of the bounding rectangle of this.
      */
     public Point getLocation() {
     	// TODO: Implement this method
-        Point loc = new Point(location.getLocation());
-        return loc;
+       Rectangle r = getBounds();
+       return r.getLocation();
     }
 
 
@@ -44,7 +54,7 @@ public abstract class Shape implements Cloneable {
      * 			returns location after call has completed.
      */
     public void setLocation(Point location) {
-    	this.location = (Point)location.clone();
+        this.location = (Point)location.clone();
     }
 
 
@@ -102,9 +112,11 @@ public abstract class Shape implements Cloneable {
     /**
      * @effects Creates and returns a copy of this.
      */
+    @Override
     public Object clone() {
     	// TODO: Implement this method
-        Shape newShape;
+        checkRep();
+        Shape newShape = null;
         try{
             newShape = (Shape) super.clone();
         }

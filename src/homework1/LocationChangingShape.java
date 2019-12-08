@@ -1,6 +1,7 @@
 package homework1;
 
 import java.awt.*;
+import java.util.Random;
 
 
 /**
@@ -13,10 +14,11 @@ import java.awt.*;
 public abstract class LocationChangingShape extends Shape implements Animatable {
 
 	// TODO: Write Abstraction Function
-	
 	// TODO: Write Representation Invariant
 
-	
+	private int xVelocity;
+	private int yVelocity;
+
 	/**
 	 * @effects Initializes this with a a given location and color. Each
 	 *          of the horizontal and vertical velocities of the new
@@ -25,6 +27,13 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
 	 */
 	LocationChangingShape(Point location, Color color) {
     	// TODO: Implement this constructor
+        super(location , color);
+        Random rand = new Random();
+        xVelocity = 0;
+        yVelocity = 0;
+        while(xVelocity == 0) xVelocity = rand.nextInt(10) - 5;
+        while(yVelocity == 0) yVelocity = rand.nextInt(10) - 5;
+
 
     
     }
@@ -35,8 +44,7 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
      */
     public int getVelocityX() {
     	// TODO: Implement this method
-
-    	
+        return  xVelocity;
     }
 
 
@@ -45,8 +53,7 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
      */
     public int getVelocityY() {
     	// TODO: Implement this method
-
-    	
+    	return yVelocity;
     }
 
 
@@ -57,8 +64,9 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
      */
     public void setVelocity(int velocityX, int velocityY) {
     	// TODO: Implement this method
+        this.xVelocity = velocityX;
+        this.yVelocity = velocityY;
 
-    	
     }
 
 
@@ -80,6 +88,26 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
      */
     public void step(Rectangle bound) {
     	// TODO: Implement this method
+        Rectangle myBound = getBounds();
+        Rectangle myBoundMoved = getBounds();
+        Rectangle xMyBoundMoved = getBounds();
+        Rectangle yMyBoundMoved = getBounds();
+        Point xNew = getLocation();
+        Point yNew = getLocation();
+        Point newLoc = getLocation();
+        xNew.translate(this.xVelocity , 0);
+        yNew.translate(0, this.yVelocity );
+        newLoc.translate(this.xVelocity , this.yVelocity );
+        xMyBoundMoved.setLocation(xNew);
+        yMyBoundMoved.setLocation(yNew);
+        myBoundMoved.setLocation(newLoc);
+
+
+
+        if(!bound.contains(myBound) || !bound.contains(myBoundMoved)){
+            if()
+        }
+
 
     	
     }
