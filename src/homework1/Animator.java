@@ -31,6 +31,7 @@ public class Animator extends JFrame implements ActionListener {
 	private JPanel mainPanel;
 	private ArrayList<LocationChangingShape> shapes;
 	private int numOfNumberdOvals;
+	private Random rand;
 
 	// shapes that have been added to this
 	
@@ -53,6 +54,7 @@ public class Animator extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
         shapes = new ArrayList<LocationChangingShape>();
 		numOfNumberdOvals = 0;
+		rand = new Random();
 
         // enable animation timer (ticks 25 times per second)
         Timer timer = new Timer(40, new ActionListener() {
@@ -181,13 +183,22 @@ public class Animator extends JFrame implements ActionListener {
       		 	 (source.equals(ovalItem)) ||
       		 	 (source.equals(numberedOvalItem)) ||
       		 	 (source.equals(sectorItem))) {
-			Random rand = new Random();
-			Point loc = new Point(rand.nextInt(getContentPane().getWidth()) , rand.nextInt(getContentPane().getHeight()));
+
+			int randWidth = (int)(WINDOW_WIDTH * (0.1 + (0.3 - 0.1) * rand.nextDouble()));
+			int randHeight = (int)(WINDOW_HEIGHT * (0.1 + (0.3 - 0.1) * rand.nextDouble()));
+			int xMax = getContentPane().getWidth() - randWidth;
+			int yMax = getContentPane().getHeight() - randHeight;
+			int xPos = -1;
+			int yPos = -1;
+			Rectangle newShapeBound= new Rectangle(xPos , yPos , randWidth , randHeight);
+			while(!getContentPane().getBounds().contains(newShapeBound)){
+				xPos = rand.nextInt(xMax);
+				yPos = rand.nextInt(yMax);
+				newShapeBound.setLocation(xPos , yPos);
+			}
 			Color c = new Color(rand.nextInt(255) , rand.nextInt(255) , rand.nextInt(255));
-			int randWidth = (int)(WINDOW_WIDTH * 1/10 + WINDOW_WIDTH * (3/10 - 1/10) * rand.nextDouble());
-			int randHeight = (int)(WINDOW_HEIGHT * 1/10 + WINDOW_HEIGHT * (3/10 - 1/10) * rand.nextDouble());
-			Dimension dim = new Dimension(randWidth , randHeight);
-			shapes.add(new LocationChangingOval(loc , c , dim));
+//			Dimension dim = new Dimension(randWidth , randHeight);
+			shapes.add(new LocationChangingOval(newShapeBound.getLocation() , c , newShapeBound.getSize()));
 			// TODO: Add code for creating the appropriate shape such that:
 			// 		 it is completely inside the window's bounds &&
 			//		 its location and size are randomly selected &&
