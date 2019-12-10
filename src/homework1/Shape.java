@@ -43,8 +43,7 @@ public abstract class Shape implements Cloneable {
      */
     public Point getLocation() {
     	// TODO: Implement this method
-       Rectangle r = getBounds();
-       return r.getLocation();
+       return (Point) location.clone();
     }
 
 

@@ -2,6 +2,11 @@ package homework1;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Random;
+
 import javax.swing.*;
 
 /**
@@ -24,6 +29,8 @@ public class Animator extends JFrame implements ActionListener {
 						numberedOvalItem, sectorItem, aboutItem;
 	private JCheckBoxMenuItem animationCheckItem;
 	private JPanel mainPanel;
+	private ArrayList<LocationChangingShape> shapes;
+	private int numOfNumberdOvals;
 
 	// shapes that have been added to this
 	
@@ -44,6 +51,8 @@ public class Animator extends JFrame implements ActionListener {
 		getContentPane().add(mainPanel);
 		menuBar = (JMenuBar)createMenuBar();
         setJMenuBar(menuBar);
+        shapes = new ArrayList<LocationChangingShape>();
+		numOfNumberdOvals = 0;
 
         // enable animation timer (ticks 25 times per second)
         Timer timer = new Timer(40, new ActionListener() {
@@ -51,7 +60,11 @@ public class Animator extends JFrame implements ActionListener {
                 if (animationCheckItem.isSelected()) {
                 	// TODO: Add code for making one animation step for all
                 	// 		 shapes in this
+					ListIterator<LocationChangingShape> iter = shapes.listIterator();
 
+					while(iter.hasNext()){
+						iter.next().step(getContentPane().getBounds());
+					}
                 	
 
             		repaint();	// make sure that the shapes are redrawn
@@ -130,7 +143,11 @@ public class Animator extends JFrame implements ActionListener {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
-
+		for(LocationChangingShape shape : shapes){
+			Graphics contentPaneGraphics = getContentPane().getGraphics();
+			contentPaneGraphics.setColor(shape.getColor());
+			shape.draw(contentPaneGraphics);
+		}
 		//TODO: Add code for drawing all shapes in this
 
 		
@@ -149,7 +166,7 @@ public class Animator extends JFrame implements ActionListener {
 		if (source.equals(newItem)) {
 			shapes.clear();
 			repaint();
-			
+			numOfNumberdOvals = 0;
 			//TODO  Add code for number of LocationChangingNumerOval = 0
 		}
 
@@ -164,7 +181,13 @@ public class Animator extends JFrame implements ActionListener {
       		 	 (source.equals(ovalItem)) ||
       		 	 (source.equals(numberedOvalItem)) ||
       		 	 (source.equals(sectorItem))) {
-
+			Random rand = new Random();
+			Point loc = new Point(rand.nextInt(getContentPane().getWidth()) , rand.nextInt(getContentPane().getHeight()));
+			Color c = new Color(rand.nextInt(255) , rand.nextInt(255) , rand.nextInt(255));
+			int randWidth = (int)(WINDOW_WIDTH * 1/10 + WINDOW_WIDTH * (3/10 - 1/10) * rand.nextDouble());
+			int randHeight = (int)(WINDOW_HEIGHT * 1/10 + WINDOW_HEIGHT * (3/10 - 1/10) * rand.nextDouble());
+			Dimension dim = new Dimension(randWidth , randHeight);
+			shapes.add(new LocationChangingOval(loc , c , dim));
 			// TODO: Add code for creating the appropriate shape such that:
 			// 		 it is completely inside the window's bounds &&
 			//		 its location and size are randomly selected &&

@@ -87,28 +87,23 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
      * 			p = p + v
      */
     public void step(Rectangle bound) {
-    	// TODO: Implement this method
-        Rectangle myBound = getBounds();
-        Rectangle myBoundMoved = getBounds();
-        Rectangle xMyBoundMoved = getBounds();
-        Rectangle yMyBoundMoved = getBounds();
-        Point xNew = getLocation();
-        Point yNew = getLocation();
-        Point newLoc = getLocation();
-        xNew.translate(this.xVelocity , 0);
-        yNew.translate(0, this.yVelocity );
-        newLoc.translate(this.xVelocity , this.yVelocity );
-        xMyBoundMoved.setLocation(xNew);
-        yMyBoundMoved.setLocation(yNew);
-        myBoundMoved.setLocation(newLoc);
-
-
-
-        if(!bound.contains(myBound) || !bound.contains(myBoundMoved)){
-            if()
+        // TODO: Implement this method
+        Point newLocX = getLocation();
+        Point newLocY = getLocation();
+        Point finalLoc = getLocation();
+        newLocX.translate(xVelocity, 0);
+        newLocY.translate(0, yVelocity);
+        Rectangle newBoundX = getBounds();
+        Rectangle newBoundY = getBounds();
+        newBoundX.setLocation(newLocX);
+        newBoundY.setLocation(newLocY);
+        if (!bound.contains(newBoundX)) {
+            xVelocity = -xVelocity;
         }
-
-
-    	
+        if (!bound.contains(newBoundY)) {
+            yVelocity = -yVelocity;
+        }
+        finalLoc.translate(xVelocity , yVelocity);
+        setLocation(finalLoc);
     }
 }
