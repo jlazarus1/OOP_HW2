@@ -4,9 +4,8 @@ import java.awt.*;
 
 public class LocationChangingOval extends LocationChangingShape {
 
-    private Rectangle size;
     /**
-     * @param dim
+     * @param dimension
      * @param location
      * @param color
      * @effects Initializes this with a a given location and color. Each
@@ -15,30 +14,21 @@ public class LocationChangingOval extends LocationChangingShape {
      * -5 <= i <= 5 and i != 0
      */
 
-    LocationChangingOval(Point location, Color color , Dimension dim) {
-        super(location, color);
-        size = new Rectangle(dim);
-        size.setLocation(getLocation());
+    LocationChangingOval(Point location, Color color , Dimension dimension) {
+        super(location, dimension , color);
     }
 
-    @Override
-    public void setSize(Dimension dimension) throws ImpossibleSizeException {
-        if(dimension.getWidth() < 0 || dimension.getHeight() < 0)throw new ImpossibleSizeException();
-         size.setSize(dimension);
-    }
 
-    @Override
-    public Rectangle getBounds() {
-        return size.getBounds();
-    }
 
     @Override
     public void draw(Graphics g) {
-        int x = (int)getLocation().getX();
-        int y = (int) getLocation().getY();
-        int height = (int) getBounds().getHeight();
+        Graphics2D g2d = (Graphics2D) g;
+        Rectangle shapeBound = getBounds();
+        int x = (int) shapeBound.getX();
+        int y = (int) shapeBound.getY();
+        int height = (int) shapeBound.getHeight();
         int width = (int) getBounds().getWidth();
-        g.fillOval(x , y , width , height);
-        g.setColor(getColor());
+        g2d.fillOval(x , y , width , height);
+        g2d.setColor(getColor());
     }
 }

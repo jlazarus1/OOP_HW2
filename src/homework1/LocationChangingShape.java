@@ -25,9 +25,9 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
 	 *          object is set to a random integral value i such that
 	 *          -5 <= i <= 5 and i != 0
 	 */
-	LocationChangingShape(Point location, Color color) {
+	LocationChangingShape(Point location, Dimension dimension , Color color) {
     	// TODO: Implement this constructor
-        super(location , color);
+        super(location , dimension , color);
         Random rand = new Random();
         xVelocity = 0;
         yVelocity = 0;
@@ -90,18 +90,34 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
         // TODO: Implement this method
         Point newLocX = getLocation();
         Point newLocY = getLocation();
+
+        Point newLocNegativeX = getLocation();
+        Point newLocNegativeY = getLocation();
+
+        Point centerOfBound = bound.getLocation();
+
         Point finalLoc = getLocation();
-        newLocX.translate(xVelocity, 0);
-        newLocY.translate(0, yVelocity);
+
         Rectangle newBoundX = getBounds();
         Rectangle newBoundY = getBounds();
+
+        int halfWidth = (int) bound.getWidth() / 2;
+        int halfHeight = (int) bound.getHeight() / 2;
+
+        centerOfBound.translate(halfWidth , halfHeight);
+        newLocX.translate(xVelocity, 0);
+        newLocY.translate(0, yVelocity);
+        newLocNegativeX.translate(-xVelocity , 0);
+        newLocNegativeY.translate(0 , -yVelocity);
         newBoundX.setLocation(newLocX);
         newBoundY.setLocation(newLocY);
         if(!bound.contains(getBounds()) || !bound.contains(newBoundX) || !bound.contains(newBoundY)) {
             if (!bound.contains(newBoundX)) {
+                if(newLocX.distance(centerOfBound) >= newLocNegativeX.distance(centerOfBound))
                 xVelocity = -xVelocity;
             }
             if (!bound.contains(newBoundY)) {
+                if(newLocY.distance(centerOfBound) >= newLocNegativeY.distance(centerOfBound))
                 yVelocity = -yVelocity;
             }
         }

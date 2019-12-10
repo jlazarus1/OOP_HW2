@@ -12,6 +12,7 @@ public abstract class Shape implements Cloneable {
 
 	private Point location;
 	private Color color;
+	private Dimension size;
 
 	
 	// TODO: Write Abstraction Function
@@ -19,7 +20,7 @@ public abstract class Shape implements Cloneable {
     //  represents a shape with a top left corner at this.location and with a color as in this.color.
     //
     // Rep .Invariant:
-    //  location != null
+    //  location != null && locatiom.X >= 0 && locatiom.Y >= 0
     //  color != null.
 	
 	// TODO: Write Representation Invariant
@@ -28,14 +29,21 @@ public abstract class Shape implements Cloneable {
 	/**
 	 * @effects Initializes this with a a given location and color.
 	 */
-    public Shape(Point location, Color color) {
+    public Shape(Point location, Dimension dimension , Color color) {
     	setLocation(location);
     	setColor(color);
-        checkRep();
+    	try {
+            setSize(dimension);
+        }
+    	catch (ImpossibleSizeException e){
+    	    size = e.getSize();
+        }
     }
     private void checkRep(){
         assert color != null: "Color must not be null.";
         assert location != null: "Location must not be null.";
+        assert location.getX() >= 0: "Cooridnates must be non negative.";
+        assert location.getY() >= 0: "Cooridnates must be non negative.";
     }
 
     /**
@@ -53,7 +61,9 @@ public abstract class Shape implements Cloneable {
      * 			returns location after call has completed.
      */
     public void setLocation(Point location) {
+
         this.location = (Point)location.clone();
+        checkRep();
     }
 
 
@@ -66,13 +76,21 @@ public abstract class Shape implements Cloneable {
      * 			(the exception suggests an alternative dimension that is
      * 			 supported by this).
      */
-    public abstract void setSize(Dimension dimension) throws ImpossibleSizeException;
+    public void setSize(Dimension dimension) throws ImpossibleSizeException{
+        if(dimension.getHeight() <= 0 || dimension.getWidth() <= 0){
+            throw new ImpossibleSizeException();
+        }
+        size = new Dimension(dimension);
+    };
 
     
     /**
      * @return the bounding rectangle of this.
      */
-    public abstract Rectangle getBounds();
+    public Rectangle getBounds(){
+        Dimension size = new Dimension(this.size);
+        return new Rectangle(getLocation() , size);
+    }
   
 
     /**
@@ -80,7 +98,8 @@ public abstract class Shape implements Cloneable {
      * 		   this and false otherwise.
      */
     public boolean contains(Point point) {
-    	return getBounds().contains(point);
+
+        return getBounds().contains(point);
     }
         
 
@@ -88,7 +107,8 @@ public abstract class Shape implements Cloneable {
      * @return color of this.
      */
     public Color getColor() {
-    	return color;
+
+        return color;
     }
 
 
@@ -97,7 +117,8 @@ public abstract class Shape implements Cloneable {
      * @effects Sets color of this.
      */
     public void setColor(Color color) {
-    	this.color = color;
+
+        this.color = color;
     }
 
 
@@ -123,7 +144,7 @@ public abstract class Shape implements Cloneable {
             assert false: "CloneNotSupportedException for Shape.clone()";
         }
         newShape.location = (Point) this.location.clone();
-        newShape.color = (Color) this.color;
+        newShape.color = this.color;
 
         return  newShape;
     }

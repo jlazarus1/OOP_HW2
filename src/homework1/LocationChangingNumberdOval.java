@@ -4,8 +4,7 @@ import java.awt.*;
 
 public class LocationChangingNumberdOval extends LocationChangingOval {
 
-
-    private Integer number;
+    private Integer id;
     /**
      * @param location
      * @param color
@@ -15,23 +14,24 @@ public class LocationChangingNumberdOval extends LocationChangingOval {
      * object is set to a random integral value i such that
      * -5 <= i <= 5 and i != 0
      */
-    LocationChangingNumberdOval(Point location, Color color, Dimension dim , int Num) {
+    LocationChangingNumberdOval(Point location, Color color, Dimension dim , int id) {
         super(location, color, dim);
-        number = Num;
-        number++;
+        this.id = id;
     }
 
     @Override
     public void draw(Graphics g) {
-        int x = (int)getLocation().getX();
-        int y = (int) getLocation().getY();
-        int height = (int) getBounds().getHeight();
-        int width = (int) getBounds().getWidth();
-
-        g.fillOval(x , y , width , height);
-        g.setColor(getColor());
-//        x = x + (width/2);
-//        y = y + (height/2);
-        g.drawString(number.toString() , x , y);
+        Rectangle bounds = getBounds();
+        int x = (int)bounds.getX();
+        int y = (int) bounds.getY();
+        int height = (int) bounds.getHeight();
+        int width = (int) bounds.getWidth();
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(getColor());
+        g2d.fillOval(x , y , width , height);
+        x = x + (width / 2);
+        y = y + (height / 2);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(id.toString() , x , y);
     }
 }

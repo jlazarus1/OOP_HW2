@@ -10,7 +10,7 @@ public class ImpossibleSizeException extends Exception {
      */
     public ImpossibleSizeException(){
         super();
-        size = new Dimension();
+        size = new Dimension(20,20);
 
     }
     /**

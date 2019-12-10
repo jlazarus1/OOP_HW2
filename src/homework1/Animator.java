@@ -3,7 +3,6 @@ package homework1;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -146,7 +145,7 @@ public class Animator extends JFrame implements ActionListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		for(LocationChangingShape shape : shapes){
-			Graphics contentPaneGraphics = getContentPane().getGraphics();
+			Graphics2D contentPaneGraphics = (Graphics2D) getContentPane().getGraphics();
 			contentPaneGraphics.setColor(shape.getColor());
 			shape.draw(contentPaneGraphics);
 		}
@@ -196,9 +195,14 @@ public class Animator extends JFrame implements ActionListener {
 				yPos = rand.nextInt(yMax);
 				newShapeBound.setLocation(xPos , yPos);
 			}
-			Color c = new Color(rand.nextInt(255) , rand.nextInt(255) , rand.nextInt(255));
-//			Dimension dim = new Dimension(randWidth , randHeight);
-			shapes.add(new LocationChangingOval(newShapeBound.getLocation() , c , newShapeBound.getSize()));
+			Color shapeColor = new Color(rand.nextInt(255) , rand.nextInt(255) , rand.nextInt(255));
+			if(source.equals(ovalItem)) {
+				shapes.add(new LocationChangingOval(newShapeBound.getLocation(), shapeColor ,  newShapeBound.getSize()));
+			}
+			else if(source.equals(numberedOvalItem)){
+				shapes.add(new LocationChangingNumberdOval(newShapeBound.getLocation(), shapeColor, newShapeBound.getSize() , numOfNumberdOvals));
+				numOfNumberdOvals++;
+			}
 			// TODO: Add code for creating the appropriate shape such that:
 			// 		 it is completely inside the window's bounds &&
 			//		 its location and size are randomly selected &&
