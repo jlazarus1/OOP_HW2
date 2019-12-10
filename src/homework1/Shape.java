@@ -145,6 +145,7 @@ public abstract class Shape implements Cloneable {
         }
         newShape.location = (Point) this.location.clone();
         newShape.color = this.color;
+        newShape.size = new Dimension(size);
 
         return  newShape;
     }

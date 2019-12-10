@@ -28,7 +28,7 @@ public class Animator extends JFrame implements ActionListener {
 						numberedOvalItem, sectorItem, aboutItem;
 	private JCheckBoxMenuItem animationCheckItem;
 	private JPanel mainPanel;
-	private ArrayList<LocationChangingShape> shapes;
+	private ArrayList<Shape> shapes;
 	private int numOfNumberdOvals;
 	private Random rand;
 
@@ -51,7 +51,7 @@ public class Animator extends JFrame implements ActionListener {
 		getContentPane().add(mainPanel);
 		menuBar = (JMenuBar)createMenuBar();
         setJMenuBar(menuBar);
-        shapes = new ArrayList<LocationChangingShape>();
+        shapes = new ArrayList<>();
 		numOfNumberdOvals = 0;
 		rand = new Random();
 
@@ -61,10 +61,11 @@ public class Animator extends JFrame implements ActionListener {
                 if (animationCheckItem.isSelected()) {
                 	// TODO: Add code for making one animation step for all
                 	// 		 shapes in this
-					ListIterator<LocationChangingShape> iter = shapes.listIterator();
+					ListIterator iter = shapes.listIterator();
 
 					while(iter.hasNext()){
-						iter.next().step(getContentPane().getBounds());
+						Animatable nextShape = (Animatable) iter.next();
+						nextShape.step(getContentPane().getBounds());
 					}
                 	
 
@@ -144,7 +145,7 @@ public class Animator extends JFrame implements ActionListener {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
-		for(LocationChangingShape shape : shapes){
+		for(Shape shape : shapes){
 			Graphics2D contentPaneGraphics = (Graphics2D) getContentPane().getGraphics();
 			contentPaneGraphics.setColor(shape.getColor());
 			shape.draw(contentPaneGraphics);
@@ -182,7 +183,7 @@ public class Animator extends JFrame implements ActionListener {
       		 	 (source.equals(ovalItem)) ||
       		 	 (source.equals(numberedOvalItem)) ||
       		 	 (source.equals(sectorItem))) {
-
+			Shape newShape;
 			int randWidth = (int)(WINDOW_WIDTH * (0.1 + (0.3 - 0.1) * rand.nextDouble()));
 			int randHeight = (int)(WINDOW_HEIGHT * (0.1 + (0.3 - 0.1) * rand.nextDouble()));
 			int xMax = getContentPane().getWidth() - randWidth;
@@ -196,12 +197,22 @@ public class Animator extends JFrame implements ActionListener {
 				newShapeBound.setLocation(xPos , yPos);
 			}
 			Color shapeColor = new Color(rand.nextInt(255) , rand.nextInt(255) , rand.nextInt(255));
+			Point shapeLoc = newShapeBound.getLocation();
+			Dimension shapeSize = newShapeBound.getSize();
 			if(source.equals(ovalItem)) {
-				shapes.add(new LocationChangingOval(newShapeBound.getLocation(), shapeColor ,  newShapeBound.getSize()));
+				newShape = new LocationChangingOval(shapeLoc, shapeSize, shapeColor);
+				shapes.add(newShape);
 			}
 			else if(source.equals(numberedOvalItem)){
-				shapes.add(new LocationChangingNumberdOval(newShapeBound.getLocation(), shapeColor, newShapeBound.getSize() , numOfNumberdOvals));
+				newShape = new LocationChangingNumberdOval(shapeLoc , shapeSize, shapeColor , numOfNumberdOvals);
+				shapes.add(newShape);
 				numOfNumberdOvals++;
+			}
+			else if(source.equals(sectorItem)){
+				int startAngle = rand.nextInt(360);
+				int arcAngle = rand.nextInt(360);
+				newShape = new AngleChangingSector(shapeLoc , shapeSize , shapeColor , startAngle , arcAngle);
+				shapes.add(newShape);
 			}
 			// TODO: Add code for creating the appropriate shape such that:
 			// 		 it is completely inside the window's bounds &&

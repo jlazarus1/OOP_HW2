@@ -5,8 +5,8 @@ import java.awt.*;
 public class LocationChangingOval extends LocationChangingShape {
 
     /**
-     * @param dimension
      * @param location
+     * @param dimension
      * @param color
      * @effects Initializes this with a a given location and color. Each
      * of the horizontal and vertical velocities of the new
@@ -14,7 +14,7 @@ public class LocationChangingOval extends LocationChangingShape {
      * -5 <= i <= 5 and i != 0
      */
 
-    LocationChangingOval(Point location, Color color , Dimension dimension) {
+    LocationChangingOval(Point location, Dimension dimension, Color color) {
         super(location, dimension , color);
     }
 
