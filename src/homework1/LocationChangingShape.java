@@ -97,11 +97,13 @@ public abstract class LocationChangingShape extends Shape implements Animatable 
         Rectangle newBoundY = getBounds();
         newBoundX.setLocation(newLocX);
         newBoundY.setLocation(newLocY);
-        if (!bound.contains(newBoundX)) {
-            xVelocity = -xVelocity;
-        }
-        if (!bound.contains(newBoundY)) {
-            yVelocity = -yVelocity;
+        if(!bound.contains(getBounds()) || !bound.contains(newBoundX) || !bound.contains(newBoundY)) {
+            if (!bound.contains(newBoundX)) {
+                xVelocity = -xVelocity;
+            }
+            if (!bound.contains(newBoundY)) {
+                yVelocity = -yVelocity;
+            }
         }
         finalLoc.translate(xVelocity , yVelocity);
         setLocation(finalLoc);
